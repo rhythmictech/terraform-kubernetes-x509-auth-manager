@@ -1,31 +1,39 @@
-# terraform-anycloud-template [![](https://github.com/rhythmictech/terraform-anycloud-template/workflows/pre-commit-check/badge.svg)](https://github.com/rhythmictech/terraform-anycloud-template/actions) <a href="https://twitter.com/intent/follow?screen_name=RhythmicTech"><img src="https://img.shields.io/twitter/follow/RhythmicTech?style=social&logo=RhythmicTech" alt="follow on Twitter"></a>
-Template repository for terraform modules. Good for any cloud and any provider.
+# terraform-kubernetes-namespace-admins [![](https://github.com/rhythmictech/terraform-kubernetes-namespace-admins/workflows/pre-commit-check/badge.svg)](https://github.com/rhythmictech/terraform-kubernetes-namespace-admins/actions) <a href="https://twitter.com/intent/follow?screen_name=RhythmicTech"><img src="https://img.shields.io/twitter/follow/RhythmicTech?style=social&logo=RhythmicTech" alt="follow on Twitter"></a>
+Create kubeconfig files that give the user access over a namespace
 
 ## Example
 Here's what using the module will look like
 ```
 module "example" {
-  source = "rhythmictech/terraform-mycloud-mymodule
+  source = "rhythmictech/terraform-kubernetes-namespace-admins
 }
 ```
-
-## About
-A bit about this module
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
 
-No requirements.
+| Name | Version |
+|------|---------|
+| terraform | >= 0.12.0 |
+| kubernetes | ~> 1.11.0 |
+| local | ~> 1.4 |
+| tls | ~> 2.1 |
 
 ## Providers
 
-No provider.
+| Name | Version |
+|------|---------|
+| kubernetes | ~> 1.11.0 |
+| local | ~> 1.4 |
+| tls | ~> 2.1 |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | name | Moniker to apply to all resources in the module | `string` | n/a | yes |
+| namespace | Kubernetes namespace to populate | `string` | n/a | yes |
+| namespace\_admins | Names of the Users who will have access kubernetes cluster/namespace | `list(string)` | `[]` | no |
 | tags | User-Defined tags | `map(string)` | `{}` | no |
 
 ## Outputs
