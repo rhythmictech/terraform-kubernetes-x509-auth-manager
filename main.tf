@@ -1,15 +1,4 @@
 
-########################################
-# AKS
-########################################
-provider "kubernetes" {
-  host = local.host
-
-  client_certificate     = base64decode(local.client_certificate)
-  client_key             = base64decode(local.client_key)
-  cluster_ca_certificate = base64decode(local.cluster_ca_certificate)
-}
-
 # write kubeconfig locally
 #  so that we can drop to the shell and run kubectl commands
 resource "local_file" "kubeconfig" {
@@ -101,9 +90,9 @@ resource "kubernetes_role" "namespace_admin" {
     labels    = local.labels
   }
   rule {
-    api_groups = [""]
-    resources  = ["*"]
-    verbs      = ["*"]
+    api_groups = var.namespace_admins_rule.api_groups
+    resources  = var.namespace_admins_rule.resources
+    verbs      = var.namespace_admins_rule.verbs
   }
 }
 
