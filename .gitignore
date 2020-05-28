@@ -7,3 +7,11 @@
 
 # .tfvars files
 *.tfvars
+
+# keys
+*.pem
+examples/basic/init.sh
+
+# module files
+kubeconfigs
+csr_requests
