@@ -9,13 +9,21 @@ variable "client_key" {
   type        = string
 }
 
-variable "client_ca_certificate" {
+variable "cluster_ca_certificate" {
   description = "PEM-encoded root certificates bundle for TLS authentication."
   type        = string
 }
 
+variable "cluster_name" {}
+
 variable "host" {
   description = "The hostname (in form of URI) of Kubernetes master."
+  type        = string
+}
+
+variable "kubeconfig_file" {
+  default     = "~/.kube/config"
+  description = "Path to kubeconfig file used to request CSR approval"
   type        = string
 }
 
@@ -56,11 +64,17 @@ variable "namespace_admins_rule" {
 }
 
 locals {
-  client_certificate           = var.client_certificate
-  client_key                   = var.client_key
-  cluster_ca_certificate       = var.cluster_ca_certificate
-  cluster_name                 = var.cluster_name
-  host                         = var.host
+  client_certificate        = var.client_certificate
+  client_key                = var.client_key
+  client_crt_path           = "${path.module}/client_crts/"
+  cluster_ca_certificate    = var.cluster_ca_certificate
+  cluster_name              = var.cluster_name
+  csr_request_template_path = "${path.module}/csr_requests/"
+  host                      = var.host
+  # admin user (your) kubeconfig file
+  kubeconfig_file_name = "~/.kube/config"
+  # for the users kubeconfig files
+  kubeconfigs_file_path        = "${path.module}/kubeconfigs/"
   kubernetes_role_name         = "${var.name}-${var.namespace}-admin-ro"
   kubernetes_role_binding_name = "${var.name}-${var.namespace}-admin-robind"
   labels = {

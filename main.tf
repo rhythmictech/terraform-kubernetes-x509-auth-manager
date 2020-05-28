@@ -1,11 +1,8 @@
 
-# write kubeconfig locally
-#  so that we can drop to the shell and run kubectl commands
-resource "local_file" "kubeconfig" {
-  content  = local.kube_config_raw
-  filename = "kubeconfig"
-}
-
+########################################
+# Namespace
+# the kubernetes namespace
+########################################
 resource "kubernetes_namespace" "this" {
   metadata {
     name        = var.namespace
@@ -15,7 +12,7 @@ resource "kubernetes_namespace" "this" {
 }
 
 ########################################
-# Namespace Admins
+# Create the Private Key
 ########################################
 resource "tls_private_key" "client_key" {
   count     = length(var.namespace_admins)
@@ -23,6 +20,10 @@ resource "tls_private_key" "client_key" {
   rsa_bits  = 4096
 }
 
+########################################
+# Create CSR
+# to request a certificate from our Kubernetes' CA
+########################################
 resource "tls_cert_request" "client_csr" {
   count           = length(var.namespace_admins)
   key_algorithm   = "RSA"
@@ -34,9 +35,13 @@ resource "tls_cert_request" "client_csr" {
   }
 }
 
+########################################
+# Ask
+########################################
 resource "local_file" "csr_requests" {
   count    = length(var.namespace_admins)
-  filename = "${path.module}/csr_requests/${var.namespace_admins[count.index]}.yaml"
+  filename = join("", [local.csr_request_template_path, "${var.namespace_admins[count.index]}.yaml"])
+
   content = templatefile(
     "${path.module}/certificate_signing_request.yaml.tpl", {
       name       = var.namespace_admins[count.index],
@@ -46,26 +51,30 @@ resource "local_file" "csr_requests" {
 
   provisioner "local-exec" {
     command = <<EOT
-kubectl --kubeconfig ./kubeconfig \
-  create -f ${path.module}/csr_requests/${var.namespace_admins[count.index]}.yaml
+kubectl --kubeconfig ./${local.kubeconfig_file_name} \
+  create -f ${path.module}${var.namespace_admins[count.index]}.yaml
 
-kubectl --kubeconfig ./kubeconfig \
+kubectl --kubeconfig ./${local.kubeconfig_file_name} \
   certificate approve ${var.namespace_admins[count.index]}
 
-kubectl --kubeconfig ./kubeconfig \
+kubectl --kubeconfig ./${local.kubeconfig_file_name} \
   get csr ${var.namespace_admins[count.index]} \
-  -o jsonpath='{.status.certificate}' | base64 -d > ${var.namespace_admins[count.index]}.pem
+  -o jsonpath='{.status.certificate}' \
+  | base64 -d > ${var.namespace_admins[count.index]}.pem
 EOT
   }
 }
 
 data "local_file" "client_crt" {
   count      = length(var.namespace_admins)
-  filename   = "${path.module}/${var.namespace_admins[count.index]}.pem"
+  filename   = "${var.namespace_admins[count.index]}.pem"
   depends_on = [local_file.csr_requests]
 }
 
+########################################
+# Kubeconfig files!
 # this resource writes the kubeconfigs to a file
+########################################
 resource "local_file" "user_kubeconfigs" {
   count    = length(var.namespace_admins)
   filename = "${path.module}/kubeconfigs/${var.namespace_admins[count.index]}.yaml"

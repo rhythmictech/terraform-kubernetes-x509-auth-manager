@@ -1,41 +1,34 @@
-
 # lazily defing my vars as locals
 locals {
   env       = "sandbox"
   name      = "example"
   owner     = "Rhythmictech"
-  namespace = "aws-rhythmic-sandbox"
+  namespace = "azure-rhythmic-sandbox"
 }
 
-module "tags" {
-  source = "git::https://github.com/rhythmictech/terraform-terraform-tags.git?ref=v1.0.0"
+variable "client_certificate" {}
+variable "client_key" {}
+variable "cluster_ca_certificate" {}
+variable "host" {}
 
-  names = [
-    local.name,
-    local.env,
-  ]
-
-  tags = {
-    "Env"   = local.env,
-    "Owner" = local.owner
-  }
-}
-
-
-module "example" {
+module "admins" {
   # source = "git::https://github.com/rhythmictech/terraform-kubernetes-namespace-admins.git?ref=master
   source = "../.."
 
-  name      = module.tags.name
-  namespace = local.namespace
+  client_certificate     = var.client_certificate
+  client_key             = var.client_key
+  cluster_ca_certificate = var.cluster_ca_certificate
+  cluster_name           = local.name
+  host                   = var.host
+  name                   = local.name
+  namespace              = local.namespace
   namespace_admins = [
     "spice",
     "melange",
     "pierre"
   ]
-  tags = module.tags.tags
 }
 
-output "example" {
-  value = module.example
-}
+# output "example" {
+#   value = module.example
+# }

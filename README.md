@@ -31,10 +31,12 @@ module "example" {
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| client\_ca\_certificate | PEM-encoded root certificates bundle for TLS authentication. | `string` | n/a | yes |
 | client\_certificate | PEM-encoded client certificate for TLS authentication. | `string` | n/a | yes |
 | client\_key | PEM-encoded client certificate key for TLS authentication. | `string` | n/a | yes |
+| cluster\_ca\_certificate | PEM-encoded root certificates bundle for TLS authentication. | `string` | n/a | yes |
+| cluster\_name | n/a | `any` | n/a | yes |
 | host | The hostname (in form of URI) of Kubernetes master. | `string` | n/a | yes |
+| kubeconfig\_file | Path to kubeconfig file used to request CSR approval | `string` | `"~/.kube/config"` | no |
 | name | Moniker to apply to all resources in the module | `string` | n/a | yes |
 | namespace | Kubernetes namespace to populate | `string` | n/a | yes |
 | namespace\_admins | Names of the Users who will have access kubernetes cluster/namespace | `list(string)` | `[]` | no |
@@ -43,9 +45,7 @@ module "example" {
 
 ## Outputs
 
-| Name | Description |
-|------|-------------|
-| tags\_module | Tags Module in it's entirety |
+No output.
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
