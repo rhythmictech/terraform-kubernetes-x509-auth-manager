@@ -10,7 +10,6 @@ variable "cluster_ca_certificate" {}
 variable "host" {}
 
 module "admins" {
-  # source = "git::https://github.com/rhythmictech/terraform-kubernetes-namespace-admins.git?ref=master
   source = "../.."
 
   cluster_ca_certificate = var.cluster_ca_certificate
