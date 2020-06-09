@@ -6,8 +6,6 @@ locals {
   namespace = "azure-rhythmic-sandbox"
 }
 
-variable "client_certificate" {}
-variable "client_key" {}
 variable "cluster_ca_certificate" {}
 variable "host" {}
 
@@ -27,6 +25,6 @@ module "admins" {
   ]
 }
 
-# output "example" {
-#   value = module.example
-# }
+output "example" {
+  value = module.admins
+}
