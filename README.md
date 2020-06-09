@@ -44,7 +44,11 @@ module "example" {
 
 ## Outputs
 
-No output.
+| Name | Description |
+|------|-------------|
+| kubernetes\_role | The role applied to these users |
+| namespace | Kubernetes namespace |
+| user\_kubeconfigs | User Kubeconfig yaml files |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
