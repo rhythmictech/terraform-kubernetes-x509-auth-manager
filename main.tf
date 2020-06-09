@@ -36,7 +36,8 @@ resource "tls_cert_request" "client_csr" {
 }
 
 ########################################
-# Ask
+# Write out request file and
+# Request K8s to sign our keys
 ########################################
 resource "local_file" "csr_requests" {
   count    = length(var.namespace_admins)
@@ -51,13 +52,13 @@ resource "local_file" "csr_requests" {
 
   provisioner "local-exec" {
     command = <<EOT
-kubectl --kubeconfig ./${local.kubeconfig_file_name} \
+kubectl --kubeconfig ./${var.kubeconfig_file_name} \
   create -f ${path.module}${var.namespace_admins[count.index]}.yaml
 
-kubectl --kubeconfig ./${local.kubeconfig_file_name} \
+kubectl --kubeconfig ./${var.kubeconfig_file_name} \
   certificate approve ${var.namespace_admins[count.index]}
 
-kubectl --kubeconfig ./${local.kubeconfig_file_name} \
+kubectl --kubeconfig ./${var.kubeconfig_file_name} \
   get csr ${var.namespace_admins[count.index]} \
   -o jsonpath='{.status.certificate}' \
   | base64 -d > ${var.namespace_admins[count.index]}.pem
@@ -82,9 +83,9 @@ resource "local_file" "user_kubeconfigs" {
     "${path.module}/kubeconfig.yaml.tpl", {
       # CA, CRT, and KEY data need to be base64
       #  but are already encoded
-      CA_DATA         = local.cluster_ca_certificate
-      API_SERVER      = local.host,
-      CLUSTER_NAME    = local.cluster_name,
+      CA_DATA         = var.cluster_ca_certificate
+      API_SERVER      = var.host,
+      CLUSTER_NAME    = var.cluster_name,
       namespace       = var.namespace,
       username        = var.namespace_admins[count.index],
       CLIENT_CRT_DATA = base64encode(data.local_file.client_crt[count.index].content),

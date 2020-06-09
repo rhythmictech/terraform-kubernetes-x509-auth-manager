@@ -15,8 +15,6 @@ module "admins" {
   # source = "git::https://github.com/rhythmictech/terraform-kubernetes-namespace-admins.git?ref=master
   source = "../.."
 
-  client_certificate     = var.client_certificate
-  client_key             = var.client_key
   cluster_ca_certificate = var.cluster_ca_certificate
   cluster_name           = local.name
   host                   = var.host
