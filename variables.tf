@@ -14,7 +14,10 @@ variable "cluster_ca_certificate" {
   type        = string
 }
 
-variable "cluster_name" {}
+variable "cluster_name" {
+  description = "Name of the K8s cluster"
+  type        = string
+}
 
 variable "host" {
   description = "The hostname (in form of URI) of Kubernetes master."
