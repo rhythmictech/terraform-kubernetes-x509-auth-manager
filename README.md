@@ -1,11 +1,12 @@
-# terraform-kubernetes-namespace-admins [![](https://github.com/rhythmictech/terraform-kubernetes-namespace-admins/workflows/pre-commit-check/badge.svg)](https://github.com/rhythmictech/terraform-kubernetes-namespace-admins/actions) <a href="https://twitter.com/intent/follow?screen_name=RhythmicTech"><img src="https://img.shields.io/twitter/follow/RhythmicTech?style=social&logo=RhythmicTech" alt="follow on Twitter"></a>
+# terraform-kubernetes-x509-auth-manager [![](https://github.com/rhythmictech/terraform-kubernetes-x509-auth-manager/workflows/pre-commit-check/badge.svg)](https://github.com/rhythmictech/terraform-kubernetes-x509-auth-manager/actions) <a href="https://twitter.com/intent/follow?screen_name=RhythmicTech"><img src="https://img.shields.io/twitter/follow/RhythmicTech?style=social&logo=RhythmicTech" alt="follow on Twitter"></a>
 Create kubeconfig files that give the user access over a namespace
 
 ## Example
 Here's what using the module will look like
-```
+```hcl
 module "example" {
-  source = "rhythmictech/terraform-kubernetes-namespace-admins
+  source  = "rhythmictech/x509-auth-manager/kubernetes
+  version = "v1.0.0
 }
 ```
 
