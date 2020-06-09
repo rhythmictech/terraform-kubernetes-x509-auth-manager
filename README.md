@@ -1,5 +1,5 @@
 # terraform-kubernetes-x509-auth-manager [![](https://github.com/rhythmictech/terraform-kubernetes-x509-auth-manager/workflows/pre-commit-check/badge.svg)](https://github.com/rhythmictech/terraform-kubernetes-x509-auth-manager/actions) <a href="https://twitter.com/intent/follow?screen_name=RhythmicTech"><img src="https://img.shields.io/twitter/follow/RhythmicTech?style=social&logo=RhythmicTech" alt="follow on Twitter"></a>
-Create kubeconfig files that give the user access over a namespace
+Create kubeconfig files and delegate access to clusters using x509 authentication.
 
 ## Example
 Here's what using the module will look like
@@ -7,8 +7,23 @@ Here's what using the module will look like
 module "example" {
   source  = "rhythmictech/x509-auth-manager/kubernetes
   version = "v1.0.0
+
+  cluster_ca_certificate = "L0NGh@sH"
+  cluster_name           = "rhythmic-canary-cluster"
+  host                   = "https://rhythmic-canary-cluster.hcp.eastus.azmk8s.io:443"
+  name                   = "ultraspice"
+  namespace              = "the_test_spice"
+  namespace_admins = [
+    "spice",
+    "melange",
+    "pierre",
+    "thespice"
+  ]
 }
 ```
+
+## About
+This code started as a one-off usecase we had at @rhythmic where we needed to delegate access to an old AKS cluster. It was interesting enough to get turned into a blog post/terraform module! You can check it out [here](#TODO)
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
