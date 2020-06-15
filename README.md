@@ -23,7 +23,7 @@ module "example" {
 ```
 
 ## About
-This code started as a one-off usecase we had at @rhythmic where we needed to delegate access to an old AKS cluster. It was interesting enough to get turned into a blog post/terraform module! You can check it out [here](#TODO)
+This code started as a one-off usecase we had at @rhythmic where we needed to delegate access to an old AKS cluster. It was interesting enough to get turned into a blog post/terraform module! You can check it out here: [rhythmictech.com/blog/generating-new-kubernetes-users-with-terraform/](https://www.rhythmictech.com/blog/generating-new-kubernetes-users-with-terraform/)
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
